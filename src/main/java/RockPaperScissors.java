@@ -31,16 +31,31 @@ public class RockPaperScissors {
         userTwo = "Computer";
       }
 
-      Random move = new Random();
       if (playerTwoHand == "Random"){
-        playerTwoHand = moveResult(move.nextInt(3)); // not sure why it doesn't assign the result
+        Random move = new Random();
+        playerTwoHand = moveResult(move.nextInt(3));
       }
 
       // run the main code
       Integer gameResults = gameResult(playerOneHand, playerTwoHand);
       String gameResultsFinal;
 
-      if (gameResults == 0){
+      switch(gameResults){
+        case 0:
+        gameResultsFinal = String.format("It's a tie! Both %s and %s win :)", userOne, userTwo);
+          break;
+        case 1:
+        gameResultsFinal = String.format("%s wins!" , userOne);
+          break;
+        case 2:
+        gameResultsFinal = String.format("%s wins!" , userTwo);
+          break;
+        default:
+        gameResultsFinal = "Your code is not working!";
+          break;
+      }
+
+      /* if (gameResults == 0){
         gameResultsFinal = String.format("It's a tie! Both %s and %s win :)", userOne, userTwo);
       }else if(gameResults == 1){
         gameResultsFinal = String.format("%s wins!" , userOne);
@@ -48,6 +63,7 @@ public class RockPaperScissors {
       else{
         gameResultsFinal = String.format("%s wins!" , userTwo);
       }
+      */
 
       //output the winning result to the page
       model.put("userOne", userOne);
