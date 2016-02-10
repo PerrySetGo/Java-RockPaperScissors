@@ -6,8 +6,6 @@ import java.util.*;
 public class RockPaperScissors {
   public static void main(String[] args){
     String layout = "templates/layout.vtl";
-
-    // set up input page for player's names
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/input.vtl");
@@ -15,11 +13,9 @@ public class RockPaperScissors {
     }, new VelocityTemplateEngine());
 
     get("/output", (request, response) -> {
-      //set up the hashmap and set the output
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/output.vtl");
 
-      //get the usernames from the forms
       String userOne = request.queryParams("userOne");
       String playerOneHand = request.queryParams("userOneRadio");
 
@@ -31,13 +27,15 @@ public class RockPaperScissors {
         userTwo = "Computer";
       }
 
-      if (playerTwoHand == "Random"){
+      if (playerTwoHand.equals("Random")){
         Random move = new Random();
         playerTwoHand = moveResult(move.nextInt(3));
+        System.out.println("playerTwoHand" + playerTwoHand);
       }
 
-      // run the main code
+      //main code
       Integer gameResults = gameResult(playerOneHand, playerTwoHand);
+      System.out.println("gameResults " + gameResults);
       String gameResultsFinal;
 
       switch(gameResults){
@@ -51,36 +49,20 @@ public class RockPaperScissors {
         gameResultsFinal = String.format("%s wins!" , userTwo);
           break;
         default:
-        gameResultsFinal = "Your code is not working!";
+        gameResultsFinal = "ERROR. Please try again later.";
           break;
       }
-
-      /* if (gameResults == 0){
-        gameResultsFinal = String.format("It's a tie! Both %s and %s win :)", userOne, userTwo);
-      }else if(gameResults == 1){
-        gameResultsFinal = String.format("%s wins!" , userOne);
-      }
-      else{
-        gameResultsFinal = String.format("%s wins!" , userTwo);
-      }
-      */
-
-      //output the winning result to the page
       model.put("userOne", userOne);
       model.put("userOneRadio", playerOneHand);
       model.put("userTwo", userTwo);
       model.put("userTwoRadio", playerTwoHand);
       model.put("gameResultsFinal", gameResultsFinal);
-
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
   }
 
-
-   //set up the cases for player moves
     public static String moveResult (Integer number){
       String playResult;
-
       switch(number){
         case 0:
         playResult = "Rock";
@@ -101,22 +83,20 @@ public class RockPaperScissors {
       return playResult;
   }
 
-    //compare the game moves and determine a winner
     public static Integer gameResult (String playerOne, String playerTwo){
       Integer printOut;
 
-      if (playerOne == playerTwo){
+      if (playerOne.equals(playerTwo)){
         printOut = 0; // It's a tie!
-      }else if(playerOne == "Rock" && playerTwo == "Scissors"){
+      }else if(playerOne.equals("Rock") && playerTwo.equals("Scissors")){
         printOut = 1; //Player One wins!
-      }else if(playerOne == "Paper" && playerTwo == "Rock"){
+      }else if(playerOne.equals("Paper") && playerTwo.equals("Rock")){
         printOut = 1;
-      }else if(playerOne == "Scissors" && playerTwo == "Paper"){
+      }else if(playerOne.equals("Scissors") && playerTwo.equals("Paper")){
         printOut = 1;
       }else {
         printOut = 2; // Player Two wins!
       }
       return printOut;
     }
-
 }
